@@ -6,9 +6,9 @@ import { useRecoilState } from 'recoil';
 import { selectedFile } from '../../recoil/atom';
 
 //MUI
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import FolderIcon from '@mui/icons-material/Folder';
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
+import FolderRoundedIcon from '@mui/icons-material/FolderRounded';
 
 const Folder = ({ name, children, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,7 +17,6 @@ const Folder = ({ name, children, onSelect }) => {
   const iconClassName = `folder-name ${
     r_selectreItem === name ? 'selected' : ''
   }`;
-  const className = `file-name ${r_selectreItem === name ? 'selected' : ''}`;
   return (
     <div>
       <span
@@ -27,12 +26,20 @@ const Folder = ({ name, children, onSelect }) => {
         }}
         className={iconClassName}
       >
-        {isOpen ? <ExpandMoreIcon /> : <ChevronRightIcon />}{' '}
-        <FolderIcon fontSize="small" style={{ marginRight: 6 , fontSize: '18px'}} />{' '}
-        <span className={className}>{name}</span>
+        <span className="folder-chevron">
+          {isOpen ? (
+            <KeyboardArrowDownRoundedIcon />
+          ) : (
+            <KeyboardArrowRightRoundedIcon />
+          )}
+        </span>
+        <span className="folder-icon">
+          <FolderRoundedIcon />
+        </span>
+        <span className="folder-label">{name}</span>
       </span>
       {isOpen && children && (
-        <div style={{ marginLeft: '15px' }}>
+        <div className="tree-children">
           {children.map((child, index) => (
             <ItemNode key={index} {...child} onSelect={onSelect} />
           ))}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import TreePanel from './script/fileTree/TreePanel';
 import './ScriptEditor.Main.css';
@@ -6,14 +6,33 @@ import TabsEditor from './TabsEditor';
 import Split from 'react-split';
 import './Scrolbar.css';
 import Footer from './Footer';
-import TermComponent from './Terminal/TermComponent';
+import { useLmccActions } from '../lmcc/useLmccActions';
+import { useStartupPaper } from '../papers/usePapers';
 
 const ScriptEditorMain = () => {
+  const { openFromDialog } = useLmccActions();
+  useStartupPaper();
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        !event.shiftKey &&
+        !event.altKey &&
+        event.key.toLowerCase() === 'o'
+      ) {
+        event.preventDefault();
+        openFromDialog();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [openFromDialog]);
 
   return (
-    <div>
+    <div className="app-shell">
       <Split
-        sizes={[10, 90]}
+        sizes={[16, 84]}
         minSize={100}
         expandToMin={false}
         gutterSize={3}
@@ -23,22 +42,9 @@ const ScriptEditorMain = () => {
         <div className="panel">
           <TreePanel />
         </div>
-        <Split
-          sizes={[75, 25]}
-          minSize={50}
-          expandToMin={false}
-          gutterSize={3}
-          direction="vertical"
-          className="split-flex-inner"
-        >
-          <div className="panel" style={{ overflowY: 'hidden' }}>
-            <TabsEditor />
-          </div>
-          <div className="panel" style={{ overflowY: 'hidden' }}>
-            
-          <TermComponent />  
-          </div>
-        </Split>
+        <div className="panel" style={{ overflowY: 'hidden' }}>
+          <TabsEditor />
+        </div>
       </Split>
       <Footer />
     </div>

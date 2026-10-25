@@ -1,23 +1,42 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './DeleteConfirmationModal.css';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
 
-function DeleteConfirmationModal({ targetTiTle, isOpen, onClose, onSave, onDontSave }) {
+function DeleteConfirmationModal({ targetTiTle, isOpen, error, onClose, onSave, onDontSave }) {
+    useEffect(() => {
+        if (!isOpen) return;
+        const handleKey = (event) => {
+            if (event.key === 'Escape') onClose();
+        };
+        document.addEventListener('keydown', handleKey);
+        return () => document.removeEventListener('keydown', handleKey);
+    }, [isOpen, onClose]);
+
     if (!isOpen) {
         return null;
     }
 
     return (
-        <div className="modal-backdrop">
-            <div className="modal" role="dialog" aria-modal="true">
+        <div
+            className="modal-backdrop"
+            onMouseDown={(event) => {
+                if (event.target === event.currentTarget) onClose();
+            }}
+        >
+            <div className="modal" role="dialog" aria-modal="true" aria-labelledby="unsaved-title">
                 <div className="modal-header">
-                    
-                    <h5 className="modal-title">My Studio</h5>
+                    <span className="modal-icon">
+                        <WarningAmberRoundedIcon sx={{ fontSize: 19 }} />
+                    </span>
+                    <div className="modal-titles">
+                        <span className="modal-eyebrow">LMCC Studio</span>
+                        <h2 className="modal-title" id="unsaved-title">저장되지 않은 변경 사항</h2>
+                    </div>
                 </div>
                 <div className="modal-body">
-                <WarningAmberIcon style={{ color: '#FFCC00', marginRight: '10px' }} />
                     <h3>{targetTiTle}에 대한 변경 내용을 저장하겠습니까?</h3>
-                    변경 내용을 저장하지 않으면 손실됩니다.
+                    <p>변경 내용을 저장하지 않으면 손실됩니다.</p>
+                    {error ? <p className="modal-error" role="alert">{error}</p> : null}
                 </div>
                 <div className="modal-footer">
                     <button onClick={onSave} className="button button-save">저장(S)</button>

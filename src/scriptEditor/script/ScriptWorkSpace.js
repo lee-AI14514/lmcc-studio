@@ -1,5 +1,5 @@
 // 필요한 모듈 및 라이브러리를 임포트합니다.
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import MonacoEditor from 'react-monaco-editor';
 import * as monaco from 'monaco-editor';
@@ -7,28 +7,42 @@ import {
   tabTable,
   currentTab,
   directoryContentState,
-  deleteTab,
 } from '../recoil/atom';
 import system from '../../system/system';
 import _ from 'lodash';
-import DeleteConfirmationModal from './alert/DeleteConfirmationModal';
+import { MODERN_THEME, applyModernTheme } from '../theme/monacoTheme';
+import { languageForPath } from '../../lmcc/lmccLanguage';
+
+function findPathByName(fileNodes, targetName) {
+  for (const node of fileNodes) {
+    if (node.name === targetName) {
+      return node.path;
+    }
+    if (node.children) {
+      const foundPath = findPathByName(node.children, targetName);
+      if (foundPath) {
+        return foundPath;
+      }
+    }
+  }
+  return undefined;
+}
 
 function ScriptWorkSpace() {
   const [r_tabTable, set_r_tabTable] = useRecoilState(tabTable);
   const [directoryContent] = useRecoilState(directoryContentState);
-  const [r_currentTab, set_r_currentTab] = useRecoilState(currentTab);
+  const [r_currentTab] = useRecoilState(currentTab);
   const [editorInstance, setEditorInstance] = useState(null);
   const directoryContentRef = useRef(directoryContent);
   const currentTabRef = useRef(r_currentTab);
   const editorRef = useRef(null); // 에디터 인스턴스를 저장하기 위한 ref
   const containerRef = useRef(null); // 에디터를 포함할 부모 컨테이너의 ref
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
-  const [r_deleteTab, set_r_deleteTab] = useRecoilState(deleteTab);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
 //--------모나코 기본세팅------
   useEffect(() => {
-    // 자바 언어 특징 활성화
+    // modern theme (idempotent) + 자바 언어 특징 활성화
+    applyModernTheme();
     monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
       target: monaco.languages.typescript.ScriptTarget.ES2015,
       allowNonTsExtensions: true,
@@ -39,11 +53,34 @@ function ScriptWorkSpace() {
 
   const options = {
     selectOnLineNumbers: true,
+    fontSize: 13,
+    lineHeight: 22,
+    fontFamily:
+      '"JetBrains Mono", "Cascadia Code", "SF Mono", "Fira Code", Menlo, Consolas, monospace',
+    fontLigatures: true,
+    padding: { top: 14, bottom: 14 },
+    smoothScrolling: true,
+    cursorSmoothCaretAnimation: 'on',
+    cursorBlinking: 'smooth',
+    renderLineHighlight: 'all',
+    roundedSelection: true,
+    scrollBeyondLastLine: false,
+    bracketPairColorization: { enabled: true },
+    guides: { bracketPairs: true, indentation: true },
     minimap: {
       enabled: true,
       side: 'right',
       size: 'proportional',
+      showSlider: 'mouseover',
+      renderCharacters: false,
     },
+    scrollbar: {
+      verticalScrollbarSize: 10,
+      horizontalScrollbarSize: 10,
+      useShadows: false,
+    },
+    overviewRulerBorder: false,
+    hideCursorInOverviewRuler: true,
   };
 
 //-------------------------------
@@ -71,7 +108,7 @@ function ScriptWorkSpace() {
         if (!model) {
           model = monaco.editor.createModel(
             activeTab.content,
-            'java',
+            languageForPath(activeTab.filePath || activeTab.title),
             monaco.Uri.parse(activeTab.modelUri),
           );
         }
@@ -84,88 +121,38 @@ function ScriptWorkSpace() {
 
 
 //-------------------------------
-//-------------탭 삭제 로직------------------
-
-useEffect(() => {
-  const tabToDelete = r_tabTable.find((tab) => tab.title === r_deleteTab);
-
-  if (tabToDelete) {
-    if (tabToDelete.isSaved) {
-      handleDeleteTab();
-    } else {
-      setIsModalOpen(true);
-    }
-  }
-}, [r_deleteTab]);
-
-const handleSave = async () => {
-  const scriptData = findPathByName(
-    directoryContent,
-    r_deleteTab,
-  );
-  await saveFile(scriptData, editorInstance.getValue());
-  handleDeleteTab();
-  setIsModalOpen(false); // 모달 닫기
-};
-
-// '저장 안 함(N)' 버튼 클릭 핸들러
-const handleDeleteTab = () => {
-  const tabToDelete = r_tabTable.find((tab) => tab.title === r_deleteTab);
-
-  if (tabToDelete) {
-    const modelToDelete = monaco.editor.getModel(
-      monaco.Uri.parse(tabToDelete.modelUri),
-    );
-    if (modelToDelete) {
-      modelToDelete.dispose();
-    }
-
-    const newTabTable = r_tabTable.filter((tab) => tab.title !== r_deleteTab);
-
-    set_r_tabTable(newTabTable);
-
-    if (r_currentTab === r_deleteTab) {
-      set_r_currentTab(newTabTable.length > 0 ? newTabTable[0].title : null);
-    }
-    set_r_deleteTab(null);
-  }
-  handleClose();
-  setIsModalOpen(false); // 모달 닫기
-};
-
-// '취소' 버튼 클릭 핸들러
-const handleClose = () => {
-  set_r_deleteTab(null);
-  setIsModalOpen(false); // 모달 닫기
-};
-
-
-//-------------------------------
 //------------저장 -------------------
-  const saveFile = async (path, content) => {
-    try {
-      await system.writeFile(path, content);
-      const tabTableClone = _.cloneDeep(r_tabTable);
-      const idx = tabTableClone.findIndex(
-        (tab) => tab.title === currentTabRef.current,
-      );
-      tabTableClone[idx].isSaved = true;
-      tabTableClone[idx].content = editorInstance.getValue();
+  const saveFile = useCallback(
+    async (path, content) => {
+      try {
+        await system.writeFile(path, content);
+        const tabTableClone = _.cloneDeep(r_tabTable);
+        const idx = tabTableClone.findIndex(
+          (tab) => tab.title === currentTabRef.current,
+        );
+        if (idx >= 0) {
+          tabTableClone[idx].isSaved = true;
+          tabTableClone[idx].content = editorInstance.getValue();
+        }
 
-      set_r_tabTable(tabTableClone);
-    } catch (error) {
-      console.error('Error save File:', error);
-    }
-  };
+        set_r_tabTable(tabTableClone);
+      } catch (error) {
+        console.error('Error save File:', error);
+      }
+    },
+    [r_tabTable, editorInstance, set_r_tabTable]
+  );
 
   useEffect(() => {
     const handleKeyDown = async (event) => {
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
         event.preventDefault(); // 브라우저 기본 동작 방지
-        const scriptData = findPathByName(
-          directoryContentRef.current,
-          currentTabRef.current,
+        const activeTab = r_tabTable.find(
+          (tab) => tab.title === currentTabRef.current,
         );
+        const scriptData =
+          activeTab?.filePath ||
+          findPathByName(directoryContentRef.current, currentTabRef.current);
         if (scriptData && editorInstance) {
           await saveFile(scriptData, editorInstance.getValue());
         }
@@ -177,22 +164,8 @@ const handleClose = () => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [editorInstance, r_tabTable, set_r_tabTable]); // 의존성 배열에 필요한 변수들을 추가하거나 제거하세요.
+  }, [editorInstance, r_tabTable, saveFile, set_r_tabTable]);
 
-  const findPathByName = (fileNodes, targetName) => {
-    for (const node of fileNodes) {
-      if (node.name === targetName) {
-        return node.path;
-      }
-      if (node.children) {
-        const foundPath = findPathByName(node.children, targetName);
-        if (foundPath) {
-          return foundPath;
-        }
-      }
-    }
-    return undefined;
-  };
 //-------------------------------
 
 //--------------에디터 윈도우 크기 조절-----------------
@@ -237,26 +210,25 @@ const handleClose = () => {
   };
 //--------------에디터 상태 갱신-----------------
 
+  const activeEditorTab = r_tabTable.find(
+    (tab) => tab.title === r_currentTab,
+  );
+  const editorLanguage = languageForPath(
+    activeEditorTab?.filePath || r_currentTab || '',
+  );
+
   return (
     <div ref={containerRef} style={{ width: '100%', height: '100%' }}>
       {r_currentTab && (
         <MonacoEditor
           width={containerSize.width}
           height={containerSize.height}
-          language="java"
-          theme="vs-dark"
+          language={editorLanguage}
+          theme={MODERN_THEME}
           options={options}
           editorDidMount={handleEditorDidMount}
         />
       )}
-
-      <DeleteConfirmationModal
-      targetTiTle={r_currentTab}
-        isOpen={isModalOpen}
-        onSave={handleSave}
-        onDontSave={handleDeleteTab}
-        onClose={handleClose}
-      />
     </div>
   );
 }

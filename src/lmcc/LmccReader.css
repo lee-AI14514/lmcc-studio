@@ -1,0 +1,1187 @@
+/* ==================================================================
+   LMCC question reader
+   ================================================================== */
+
+.lmcc-reader {
+  --lmcc-card-bg: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.024),
+    rgba(255, 255, 255, 0.008)
+  );
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background-color: var(--bg-panel);
+  container-type: inline-size;
+}
+
+/* ---- header ------------------------------------------------------ */
+
+.lmcc-reader-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 22px 14px;
+  border-bottom: 1px solid var(--border);
+  background:
+    radial-gradient(
+      520px 90px at 8% -40%,
+      rgba(124, 107, 255, 0.16),
+      transparent 70%
+    ),
+    var(--bg-panel);
+}
+
+.lmcc-head-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.lmcc-head-titles {
+  min-width: 0;
+}
+
+.lmcc-head-titles h1 {
+  margin: 1px 0 3px;
+  overflow: hidden;
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lmcc-head-sub {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  color: var(--text-muted);
+  font-size: 11.5px;
+}
+
+.lmcc-head-sub .is-mono {
+  font-family: var(--font-mono);
+}
+
+.lmcc-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: var(--border-strong);
+}
+
+.lmcc-head-issue,
+.lmcc-head-ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 500;
+}
+
+.lmcc-head-issue {
+  border: 1px solid rgba(251, 113, 133, 0.32);
+  background-color: rgba(251, 113, 133, 0.1);
+  color: var(--danger);
+}
+
+.lmcc-head-ok {
+  border: 1px solid rgba(74, 222, 128, 0.26);
+  background-color: rgba(74, 222, 128, 0.08);
+  color: var(--success);
+}
+
+.lmcc-head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.lmcc-type-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: 0 0 auto;
+  margin-top: 2px;
+  padding: 4px 9px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.lmcc-type-files {
+  border-color: rgba(96, 165, 250, 0.3);
+  background-color: rgba(96, 165, 250, 0.1);
+  color: #93c5fd;
+}
+
+.lmcc-type-prompt {
+  border-color: rgba(167, 139, 250, 0.32);
+  background-color: rgba(167, 139, 250, 0.12);
+  color: var(--accent-bright);
+}
+
+.lmcc-type-training {
+  border-color: rgba(251, 191, 36, 0.3);
+  background-color: rgba(251, 191, 36, 0.09);
+  color: var(--warning);
+}
+
+.lmcc-type-agent {
+  border-color: rgba(45, 212, 191, 0.3);
+  background-color: rgba(45, 212, 191, 0.09);
+  color: #5eead4;
+}
+
+.lmcc-type-unknown {
+  border-color: rgba(251, 113, 133, 0.3);
+  background-color: rgba(251, 113, 133, 0.09);
+  color: var(--danger);
+}
+
+.lmcc-type-declared {
+  padding-left: 5px;
+  border-left: 1px solid currentColor;
+  opacity: 0.7;
+  font-weight: 500;
+}
+
+.lmcc-view-switch {
+  display: inline-flex;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--bg-input);
+}
+
+.lmcc-view-switch button {
+  min-width: 48px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.lmcc-view-switch button:hover {
+  color: var(--text);
+}
+
+.lmcc-view-switch button.is-active {
+  background-color: var(--bg-active);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px rgba(124, 107, 255, 0.28);
+}
+
+.lmcc-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 11px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--bg-elevated);
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.lmcc-action:hover:not(:disabled) {
+  border-color: var(--border-strong);
+  background-color: var(--bg-hover);
+  color: var(--text);
+}
+
+.lmcc-action:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.lmcc-action.is-small {
+  height: 27px;
+  padding: 0 9px;
+  font-size: 11px;
+}
+
+.lmcc-spin {
+  animation: lmcc-spin 0.9s linear infinite;
+}
+
+@keyframes lmcc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---- notice ------------------------------------------------------ */
+
+.lmcc-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 22px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+
+.lmcc-notice-error {
+  background-color: rgba(251, 113, 133, 0.08);
+  color: var(--danger);
+}
+
+.lmcc-notice-ok {
+  background-color: rgba(74, 222, 128, 0.07);
+  color: var(--success);
+}
+
+.lmcc-notice-close {
+  border: none;
+  background: transparent;
+  color: currentColor;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.lmcc-notice-close:hover {
+  opacity: 1;
+}
+
+/* ---- body layout ------------------------------------------------- */
+
+.lmcc-reader-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  overflow: hidden;
+}
+
+.lmcc-reader-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px 22px 42px;
+}
+
+.lmcc-reader-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px 18px 42px;
+  border-left: 1px solid var(--border);
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+/* ---- cards ------------------------------------------------------- */
+
+.lmcc-card {
+  min-width: 0;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--lmcc-card-bg);
+}
+
+.lmcc-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.lmcc-card-head h2 {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.lmcc-card-hint {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lmcc-card-foot {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.lmcc-statement-card {
+  padding: 20px 22px 24px;
+}
+
+/* ---- statement states -------------------------------------------- */
+
+.lmcc-statement-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  padding: 4px 0;
+}
+
+.lmcc-statement-skeleton span {
+  display: block;
+  width: 100%;
+  height: 11px;
+  border-radius: 5px;
+  background: linear-gradient(
+    90deg,
+    rgba(124, 107, 255, 0.06),
+    rgba(124, 107, 255, 0.16),
+    rgba(124, 107, 255, 0.06)
+  );
+  background-size: 200% 100%;
+  animation: lmcc-skeleton 1.5s ease-in-out infinite;
+}
+
+.lmcc-statement-skeleton span.is-title {
+  width: 42%;
+  height: 18px;
+  margin-bottom: 4px;
+}
+
+.lmcc-statement-skeleton span.is-short {
+  width: 64%;
+}
+
+.lmcc-statement-skeleton span.is-medium {
+  width: 82%;
+}
+
+@keyframes lmcc-skeleton {
+  0% {
+    background-position: 180% 0;
+  }
+  100% {
+    background-position: -80% 0;
+  }
+}
+
+.lmcc-statement-missing {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px dashed rgba(251, 113, 133, 0.4);
+  border-radius: var(--radius-sm);
+  background-color: rgba(251, 113, 133, 0.05);
+  color: var(--danger);
+}
+
+.lmcc-statement-missing strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12.5px;
+}
+
+.lmcc-statement-missing p {
+  margin: 0 0 6px;
+  color: var(--text-secondary);
+  font-size: 11.5px;
+}
+
+.lmcc-statement-missing code {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+/* ---- tables ------------------------------------------------------ */
+
+.lmcc-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.lmcc-file-table,
+.lmcc-params-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+}
+
+.lmcc-file-table th,
+.lmcc-params-table th {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--border);
+  background-color: rgba(124, 107, 255, 0.06);
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.lmcc-file-table td,
+.lmcc-params-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+  vertical-align: top;
+}
+
+.lmcc-file-table tr:last-child td,
+.lmcc-params-table tr:last-child td {
+  border-bottom: none;
+}
+
+.lmcc-file-table tbody tr:hover,
+.lmcc-params-table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.018);
+}
+
+.lmcc-path {
+  color: #c9d2f2;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+.lmcc-badge {
+  display: inline-flex;
+  padding: 1px 7px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.lmcc-badge.is-required {
+  border-color: rgba(167, 139, 250, 0.28);
+  background-color: rgba(167, 139, 250, 0.1);
+  color: var(--accent-bright);
+}
+
+.lmcc-badge.is-optional {
+  border-color: var(--border);
+  background-color: rgba(255, 255, 255, 0.03);
+  color: var(--text-muted);
+}
+
+.lmcc-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.lmcc-status.is-ok {
+  border-color: rgba(74, 222, 128, 0.24);
+  background-color: rgba(74, 222, 128, 0.08);
+  color: var(--success);
+}
+
+.lmcc-status.is-missing,
+.lmcc-status.is-error {
+  border-color: rgba(251, 113, 133, 0.28);
+  background-color: rgba(251, 113, 133, 0.08);
+  color: var(--danger);
+}
+
+.lmcc-status.is-optional-missing {
+  border-color: rgba(251, 191, 36, 0.26);
+  background-color: rgba(251, 191, 36, 0.07);
+  color: var(--warning);
+}
+
+.lmcc-status.is-checking,
+.lmcc-status.is-unknown {
+  border-color: var(--border);
+  background-color: rgba(255, 255, 255, 0.03);
+  color: var(--text-muted);
+}
+
+/* ---- empty states ------------------------------------------------ */
+
+.lmcc-empty {
+  padding: 18px 14px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 11.5px;
+  text-align: center;
+}
+
+.lmcc-empty-ok {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-style: solid;
+  border-color: rgba(74, 222, 128, 0.2);
+  background-color: rgba(74, 222, 128, 0.04);
+  color: var(--success);
+}
+
+/* ---- checks ------------------------------------------------------ */
+
+.lmcc-check-counts {
+  display: inline-flex;
+  gap: 5px;
+}
+
+.lmcc-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.lmcc-count-error {
+  background-color: rgba(251, 113, 133, 0.14);
+  color: var(--danger);
+}
+
+.lmcc-count-warning {
+  background-color: rgba(251, 191, 36, 0.12);
+  color: var(--warning);
+}
+
+.lmcc-count-info {
+  background-color: rgba(125, 211, 252, 0.12);
+  color: #7dd3fc;
+}
+
+.lmcc-check-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lmcc-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-left-width: 2px;
+  border-radius: var(--radius-sm);
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.lmcc-check-error {
+  border-left-color: var(--danger);
+  background-color: rgba(251, 113, 133, 0.05);
+}
+
+.lmcc-check-warning {
+  border-left-color: var(--warning);
+  background-color: rgba(251, 191, 36, 0.05);
+}
+
+.lmcc-check-info {
+  border-left-color: #7dd3fc;
+  background-color: rgba(125, 211, 252, 0.04);
+}
+
+.lmcc-check-icon {
+  display: flex;
+  margin-top: 1px;
+  color: var(--text-muted);
+}
+
+.lmcc-check-error .lmcc-check-icon {
+  color: var(--danger);
+}
+
+.lmcc-check-warning .lmcc-check-icon {
+  color: var(--warning);
+}
+
+.lmcc-check-info .lmcc-check-icon {
+  color: #7dd3fc;
+}
+
+.lmcc-check-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.lmcc-check-message {
+  color: var(--text-secondary);
+  font-size: 11.5px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.lmcc-check-field {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  overflow-wrap: anywhere;
+}
+
+.lmcc-check-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.lmcc-check-skeleton span {
+  height: 30px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+/* ---- meta -------------------------------------------------------- */
+
+.lmcc-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lmcc-meta-row {
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr);
+  gap: 10px;
+  align-items: baseline;
+  font-size: 11.5px;
+}
+
+.lmcc-meta-label {
+  color: var(--text-muted);
+}
+
+.lmcc-meta-value {
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.lmcc-meta-value.is-mono {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+}
+
+/* ---- inputs ------------------------------------------------------ */
+
+.lmcc-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lmcc-input {
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: rgba(255, 255, 255, 0.014);
+}
+
+.lmcc-input-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.lmcc-input-kind {
+  padding: 1px 7px;
+  border: 1px solid rgba(124, 107, 255, 0.3);
+  border-radius: 999px;
+  background-color: rgba(124, 107, 255, 0.09);
+  color: var(--accent-bright);
+  font-size: 10px;
+}
+
+.lmcc-input-label {
+  color: var(--text);
+  font-size: 12.5px;
+  font-weight: 550;
+}
+
+.lmcc-input-file {
+  margin-left: auto;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  overflow-wrap: anywhere;
+}
+
+.lmcc-input-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.lmcc-chip {
+  display: inline-flex;
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background-color: var(--bg-input);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.lmcc-chip.is-accent {
+  border-color: rgba(167, 139, 250, 0.3);
+  color: var(--accent-bright);
+}
+
+.lmcc-input .lmcc-table-wrap {
+  margin-top: 9px;
+}
+
+/* ---- prompt ------------------------------------------------------ */
+
+.lmcc-prompt-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.lmcc-prompt-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: rgba(255, 255, 255, 0.014);
+}
+
+.lmcc-prompt-stat-label {
+  color: var(--text-muted);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.lmcc-prompt-stat-value {
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.lmcc-progress {
+  height: 6px;
+  margin: 12px 0;
+  overflow: hidden;
+  border-radius: 999px;
+  background-color: var(--bg-input);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.lmcc-progress-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.25s ease;
+}
+
+.lmcc-progress-fill.is-good {
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+}
+
+.lmcc-progress-fill.is-bad {
+  background: linear-gradient(90deg, #f43f5e, #fb7185);
+}
+
+.lmcc-prompt-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.lmcc-prompt-meta strong {
+  color: var(--text-secondary);
+}
+
+.lmcc-prompt-preview {
+  margin-top: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-input);
+}
+
+.lmcc-prompt-preview-head {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.lmcc-prompt-preview pre {
+  margin: 0;
+  padding: 10px 12px;
+  overflow-x: auto;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* ---- training ---------------------------------------------------- */
+
+.lmcc-training-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lmcc-training-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: rgba(255, 255, 255, 0.014);
+}
+
+/* ---- raw source -------------------------------------------------- */
+
+.lmcc-raw {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.lmcc-raw-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 22px;
+  border-bottom: 1px solid var(--border);
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+.lmcc-raw-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.lmcc-raw-actions {
+  display: flex;
+  gap: 7px;
+}
+
+.lmcc-raw-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.lmcc-source {
+  min-width: 100%;
+  background-color: var(--bg-input);
+}
+
+.lmcc-source-body {
+  min-width: max-content;
+}
+
+.lmcc-source-row {
+  display: flex;
+  align-items: flex-start;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.lmcc-source-row:hover {
+  background-color: rgba(124, 107, 255, 0.05);
+}
+
+.lmcc-source-line-number {
+  position: sticky;
+  left: 0;
+  flex: 0 0 auto;
+  width: 52px;
+  padding-right: 12px;
+  border-right: 1px solid var(--border);
+  background-color: var(--bg-input);
+  color: #3f4560;
+  font-size: 10.5px;
+  text-align: right;
+  user-select: none;
+}
+
+.lmcc-source-line {
+  display: block;
+  padding: 0 16px;
+  color: #d7dbec;
+  font-family: inherit;
+  white-space: pre;
+}
+
+.lmcc-token-magic {
+  color: var(--accent-bright);
+  font-weight: 600;
+}
+
+.lmcc-token-string {
+  color: #7fe7c4;
+}
+
+.lmcc-token-number {
+  color: #f0a6ca;
+}
+
+.lmcc-token-literal {
+  color: var(--warning);
+}
+
+.lmcc-source-truncated {
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  color: var(--warning);
+  font-size: 11px;
+}
+
+/* ---- parse error ------------------------------------------------- */
+
+.lmcc-error-stage {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 32px 24px 48px;
+}
+
+.lmcc-error-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 22px 24px;
+  border: 1px solid rgba(251, 113, 133, 0.28);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(
+      560px 200px at 0% 0%,
+      rgba(251, 113, 133, 0.09),
+      transparent 70%
+    ),
+    var(--bg-elevated);
+  box-shadow: var(--shadow-lg);
+}
+
+.lmcc-error-icon {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(251, 113, 133, 0.3);
+  border-radius: 12px;
+  background-color: rgba(251, 113, 133, 0.1);
+  color: var(--danger);
+}
+
+.lmcc-error-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.lmcc-error-eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: var(--text-muted);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.lmcc-error-code {
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background-color: var(--bg-input);
+  color: var(--danger);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.lmcc-error-copy h2 {
+  margin: 0 0 10px;
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.lmcc-error-location,
+.lmcc-error-path {
+  margin: 0 0 8px;
+  color: var(--text-muted);
+  font-size: 11.5px;
+}
+
+.lmcc-error-path code {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+.lmcc-error-hints {
+  margin: 12px 0 14px;
+  padding-left: 18px;
+  color: var(--text-secondary);
+  font-size: 11.5px;
+  line-height: 1.7;
+}
+
+.lmcc-error-hints li::marker {
+  color: var(--danger);
+}
+
+.lmcc-error-raw {
+  margin-top: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-input);
+}
+
+.lmcc-error-raw summary {
+  padding: 8px 12px;
+  color: var(--text-muted);
+  font-size: 11px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.lmcc-error-raw summary:hover {
+  color: var(--text-secondary);
+}
+
+.lmcc-error-raw .lmcc-source {
+  border-top: 1px solid var(--border);
+  max-height: 320px;
+  overflow: auto;
+}
+
+/* ---- narrow panels ----------------------------------------------- */
+
+@container (max-width: 840px) {
+  .lmcc-reader-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .lmcc-head-actions {
+    justify-content: flex-start;
+  }
+
+  .lmcc-reader-body {
+    grid-template-columns: minmax(0, 1fr);
+    overflow-y: auto;
+  }
+
+  .lmcc-reader-main,
+  .lmcc-reader-aside {
+    overflow: visible;
+  }
+
+  .lmcc-reader-aside {
+    border-left: none;
+    border-top: 1px solid var(--border);
+  }
+}
+
+@container (max-width: 560px) {
+  .lmcc-reader-main,
+  .lmcc-reader-aside {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .lmcc-prompt-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lmcc-meta-row {
+    grid-template-columns: 72px minmax(0, 1fr);
+  }
+}

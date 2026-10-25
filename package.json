@@ -1,5 +1,7 @@
 {
   "name": "my-electron-app",
+  "productName": "LMCC Studio",
+  "description": "A modern Electron + Monaco scripting workspace.",
   "version": "0.1.0",
   "main": "electron/electron.js",
   "private": true,
@@ -12,7 +14,6 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "monaco-editor": "^0.44.0",
-    "node-pty": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-monaco-editor": "^0.55.0",
@@ -20,16 +21,15 @@
     "react-split": "^2.0.14",
     "recoil": "^0.7.7",
     "styled-components": "^6.1.8",
-    "web-vitals": "^2.1.4",
-    "xterm": "^5.3.0",
-    "xterm-addon-fit": "^0.8.0"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "react-start": "react-scripts start",
     "electron-start": "electron .",
     "start": "concurrently \"npm:watch\" \"npm:electron-wait\"",
     "watch": "react-scripts start",
-    "electron-wait": "wait-on  http://127.0.0.1:3000  && electron .",
+    "electron-wait": "wait-on  http://127.0.0.1:3000  && electron . --no-sandbox",
+    "test": "react-scripts test",
     "react-build": "react-scripts build",
     "electron-build": "electron-builder build",
     "prebuild-electron": "npm run build",
@@ -57,7 +57,6 @@
     "concurrently": "^8.2.2",
     "electron": "^29.1.6",
     "electron-builder": "^24.13.3",
-    "electron-rebuild": "^3.2.9",
     "wait-on": "^7.2.0"
   }
 }

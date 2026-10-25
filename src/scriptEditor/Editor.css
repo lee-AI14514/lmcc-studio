@@ -1,6 +1,7 @@
 .ScriptEditor {
   width: 100%;
-  height: calc(100% - 30px);
+  height: calc(100% - 43px);
   overflow-x: hidden;
   overflow-y: hidden;
+  background-color: var(--bg-panel);
 }

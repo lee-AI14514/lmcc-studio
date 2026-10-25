@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const IGNORED_DIRS = new Set(['node_modules', '.git', 'build', '.cache', 'dist']);
+
 // 비동기 방식으로 폴더 내용을 읽어오는 함수
 function readDirectory(directoryPath) {
   return new Promise((resolve, reject) => {
@@ -10,7 +12,9 @@ function readDirectory(directoryPath) {
         reject(err);
         return;
       }
-      const folders = entries.filter((entry) => entry.isDirectory());
+      const folders = entries.filter(
+        (entry) => entry.isDirectory() && !IGNORED_DIRS.has(entry.name),
+      );
       const files = entries.filter((entry) => entry.isFile());
 
       folders.sort((a, b) => a.name.localeCompare(b.name));

@@ -1,27 +1,109 @@
-
 .editor-footer {
-    background-color: #202020; /* 이미지와 유사한 배경색 */
-    color: white;
-    display: flex;
-    align-items: center;
-    padding: 0 10px;
-    font-size: 12px; /* 푸터 내 텍스트 크기 */
-    border-top: 1px solid #333; /* 상단 테두리 추가 */
-  }
+  flex: 0 0 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  background-color: var(--bg-app);
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  user-select: none;
+}
 
 .footer-content {
   display: flex;
-  width: 100%;
-  justify-content: start;
   align-items: center;
-  margin-top: 3px; 
+  gap: 16px;
+  width: 100%;
 }
 
 .footer-item {
-  margin-right: 20px; /* 아이템 간의 간격 */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.footer-brand {
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.brand-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  box-shadow: 0 0 10px rgba(124, 107, 255, 0.85);
+}
+
+.footer-pill {
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid rgba(124, 107, 255, 0.22);
+  background-color: var(--accent-soft);
+  color: var(--accent-bright);
+  font-size: 11px;
 }
 
 .footer-item-spacer {
-  flex-grow: 1;
+  flex: 1;
 }
 
+/* live system metrics: CPU / GPU / RAM / VRAM */
+.footer-metrics {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-left: 14px;
+  margin-right: 2px;
+  border-left: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.footer-metric {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.footer-metric-label {
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.footer-metric-value {
+  color: var(--text);
+}
+
+/* used-size figures (memory / VRAM) stay bright white */
+.footer-metric-strong {
+  font-size: 12px;
+  color: var(--text);
+}
+
+.footer-metric-detail {
+  font-size: 10.5px;
+  color: var(--text-muted);
+}
+
+.footer-mono {
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+}
+
+/* keep the bar compact on narrow windows */
+@media (max-width: 1080px) {
+  .footer-metric-detail-label {
+    display: none;
+  }
+}

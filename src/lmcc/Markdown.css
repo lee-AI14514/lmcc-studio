@@ -1,0 +1,297 @@
+/* Markdown rendering inside the LMCC question reader */
+
+.lmcc-markdown {
+  color: var(--text);
+  font-size: 13.5px;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.lmcc-markdown > :first-child {
+  margin-top: 0;
+}
+
+.lmcc-markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.lmcc-markdown h1,
+.lmcc-markdown h2,
+.lmcc-markdown h3,
+.lmcc-markdown h4,
+.lmcc-markdown h5,
+.lmcc-markdown h6 {
+  margin: 1.5em 0 0.6em;
+  color: var(--text);
+  font-weight: 650;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.lmcc-markdown h1 {
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--border);
+  font-size: 22px;
+}
+
+.lmcc-markdown h2 {
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--border);
+  font-size: 18px;
+}
+
+.lmcc-markdown h3 {
+  font-size: 15.5px;
+}
+
+.lmcc-markdown h4,
+.lmcc-markdown h5,
+.lmcc-markdown h6 {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.lmcc-markdown p {
+  margin: 0.7em 0;
+}
+
+.lmcc-markdown a {
+  color: var(--accent-bright);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(167, 139, 250, 0.35);
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.lmcc-markdown a:hover {
+  color: #c4b5fd;
+  border-bottom-color: var(--accent-bright);
+}
+
+.lmcc-md-link-blocked {
+  color: var(--text-secondary);
+  border-bottom: 1px dashed var(--border-strong);
+  cursor: help;
+}
+
+.lmcc-markdown strong {
+  color: #f1f2f9;
+  font-weight: 650;
+}
+
+.lmcc-markdown em {
+  color: var(--text-secondary);
+}
+
+.lmcc-markdown ul,
+.lmcc-markdown ol {
+  margin: 0.65em 0;
+  padding-left: 1.6em;
+}
+
+.lmcc-markdown li {
+  margin: 0.3em 0;
+}
+
+.lmcc-markdown li > p {
+  margin: 0.25em 0;
+}
+
+.lmcc-markdown li::marker {
+  color: var(--accent);
+}
+
+.lmcc-markdown blockquote {
+  margin: 1em 0;
+  padding: 0.35em 0 0.35em 1em;
+  border-left: 3px solid var(--accent-line);
+  color: var(--text-secondary);
+  background: linear-gradient(
+    90deg,
+    rgba(124, 107, 255, 0.07),
+    transparent 70%
+  );
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.lmcc-markdown blockquote > :first-child {
+  margin-top: 0.2em;
+}
+
+.lmcc-markdown blockquote > :last-child {
+  margin-bottom: 0.2em;
+}
+
+.lmcc-markdown hr {
+  margin: 1.6em 0;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+.lmcc-markdown code {
+  padding: 0.15em 0.4em;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background-color: var(--bg-input);
+  color: #f0c7a6;
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+}
+
+.lmcc-md-code {
+  margin: 1em 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-input);
+}
+
+.lmcc-md-code-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--border);
+  background-color: rgba(255, 255, 255, 0.018);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.lmcc-md-code pre {
+  margin: 0;
+  padding: 13px 15px;
+  overflow-x: auto;
+  color: #d7dbec;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.65;
+  tab-size: 2;
+}
+
+.lmcc-md-code pre code {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+}
+
+.lmcc-md-table-wrap {
+  margin: 1em 0;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.lmcc-md-table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.lmcc-md-table-wrap th,
+.lmcc-md-table-wrap td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.lmcc-md-table-wrap th:last-child,
+.lmcc-md-table-wrap td:last-child {
+  border-right: none;
+}
+
+.lmcc-md-table-wrap tr:last-child td {
+  border-bottom: none;
+}
+
+.lmcc-md-table-wrap th {
+  background-color: rgba(124, 107, 255, 0.08);
+  color: var(--text-secondary);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.lmcc-md-table-wrap tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.lmcc-md-image {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 100%;
+  margin: 0.6em 0;
+  vertical-align: top;
+}
+
+.lmcc-md-image img {
+  max-width: 100%;
+  max-height: 520px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-input);
+  object-fit: contain;
+}
+
+.lmcc-md-image-caption {
+  color: var(--text-muted);
+  font-size: 11.5px;
+}
+
+.lmcc-md-image-loading {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 220px;
+  padding: 14px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 11.5px;
+}
+
+.lmcc-md-image-shimmer {
+  display: block;
+  width: 100%;
+  height: 26px;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    rgba(124, 107, 255, 0.06),
+    rgba(124, 107, 255, 0.18),
+    rgba(124, 107, 255, 0.06)
+  );
+  background-size: 200% 100%;
+  animation: lmcc-image-shimmer 1.4s ease-in-out infinite;
+}
+
+.lmcc-md-image-label {
+  font-family: var(--font-mono);
+}
+
+.lmcc-md-image-missing {
+  display: inline-block;
+  padding: 8px 11px;
+  border: 1px dashed rgba(251, 113, 133, 0.45);
+  border-radius: var(--radius-sm);
+  background-color: rgba(251, 113, 133, 0.06);
+  color: var(--danger);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  overflow-wrap: anywhere;
+}
+
+@keyframes lmcc-image-shimmer {
+  0% {
+    background-position: 180% 0;
+  }
+  100% {
+    background-position: -80% 0;
+  }
+}

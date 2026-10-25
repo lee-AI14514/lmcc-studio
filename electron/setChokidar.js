@@ -7,7 +7,7 @@ const setWatcher = () => {
   const createWatcher = (path) => {
     console.log('Watching for file changes on: ', path);
     watcher = chokidar.watch(path, {
-      ignored: /(^|[\/\\])\../, // 숨김 파일 무시
+      ignored: /(^|[\/\\])(\.|node_modules|\.git|build|dist)/, // 숨김 파일/대용량 디렉토리 무시
       persistent: true,
     });
 

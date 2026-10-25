@@ -1,14 +1,20 @@
 const { app, globalShortcut } = require("electron");
 
 const createWindow = require("./createWindow.js");
-const createTerminal = require("./createTerminal.js");
+const { initSystemStats } = require("./systemStats.js");
+const { registerLmccIpc } = require("./lmccFiles.js");
+const { registerPapersIpc } = require("./papers.js");
+const { registerEvaluationIpc } = require("./evaluation.js");
 const setWatcher = require("./setChokidar.js");
 app.once("ready", () => {
   //module load
   require("./apis.js").init();
+  registerLmccIpc();
+  registerPapersIpc();
+  registerEvaluationIpc();
+  initSystemStats();
 
   createWindow(1280, 720);
-  createTerminal();
 
 });
 

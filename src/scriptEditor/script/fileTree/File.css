@@ -1,19 +1,55 @@
 .file-name {
-    cursor: pointer;
-    user-select: none;
-    color: gray;
-    display: flex; 
-    align-items: center; 
-  }
-  
-  .file-name:hover {
-    color: white;
-  }
-  
-  .file-name.selected {
-    color: white;
-  }
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 24px;
+  min-width: 0;
+  padding: 0 8px;
+  margin: 1px 0;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.12s ease, color 0.12s ease,
+    box-shadow 0.12s ease;
+}
 
-  .file-name.currentTab {
-    color: #58FAF4;
-  }
+.file-name:hover {
+  background-color: var(--bg-hover);
+  color: var(--text);
+}
+
+.file-name.selected {
+  background-color: var(--bg-hover);
+  color: var(--text);
+}
+
+.file-name.currentTab {
+  background-color: var(--accent-soft);
+  color: #efeaff;
+  box-shadow: inset 0 0 0 1px rgba(124, 107, 255, 0.18);
+}
+
+.file-icon {
+  display: flex;
+  flex: 0 0 auto;
+  color: #7d86a8;
+  transition: color 0.12s ease;
+}
+
+.file-name:hover .file-icon,
+.file-name.selected .file-icon {
+  color: var(--text-secondary);
+}
+
+.file-name.currentTab .file-icon {
+  color: var(--accent-bright);
+}
+
+.file-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

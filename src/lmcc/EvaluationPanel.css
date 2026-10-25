@@ -1,0 +1,316 @@
+/* ==================================================================
+   Local evaluation panel (right side of the question reader)
+   ================================================================== */
+
+.lmcc-eval-header-action {
+  border-color: rgba(124, 107, 255, 0.42);
+  background-color: rgba(124, 107, 255, 0.1);
+  color: var(--accent-bright);
+}
+
+.lmcc-eval-header-action:hover:not(:disabled) {
+  border-color: rgba(167, 139, 250, 0.64);
+  background-color: rgba(124, 107, 255, 0.18);
+  color: var(--text);
+}
+
+.lmcc-eval-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding-bottom: 12px;
+}
+
+.lmcc-eval-status {
+  flex: 0 0 auto;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.025);
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.lmcc-eval-status.is-running {
+  border-color: rgba(96, 165, 250, 0.32);
+  background-color: rgba(96, 165, 250, 0.09);
+  color: #93c5fd;
+}
+
+.lmcc-eval-status.is-ok {
+  border-color: rgba(74, 222, 128, 0.28);
+  background-color: rgba(74, 222, 128, 0.08);
+  color: var(--success);
+}
+
+.lmcc-eval-status.is-error {
+  border-color: rgba(251, 113, 133, 0.32);
+  background-color: rgba(251, 113, 133, 0.09);
+  color: var(--danger);
+}
+
+.lmcc-eval-status.is-warning {
+  border-color: rgba(251, 191, 36, 0.3);
+  background-color: rgba(251, 191, 36, 0.08);
+  color: var(--warning);
+}
+
+.lmcc-eval-target {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: rgba(255, 255, 255, 0.014);
+}
+
+.lmcc-eval-target-icon {
+  display: flex;
+  margin-top: 1px;
+  color: var(--accent-bright);
+}
+
+.lmcc-eval-target-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.lmcc-eval-target-copy code {
+  color: #c9d2f2;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  overflow-wrap: anywhere;
+}
+
+.lmcc-eval-target-copy span {
+  color: var(--text-muted);
+  font-size: 9.5px;
+}
+
+.lmcc-eval-runtime {
+  max-width: 42%;
+  margin-left: auto;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lmcc-eval-disabled {
+  margin: 10px 0 0;
+  padding: 8px 9px;
+  border-left: 2px solid var(--warning);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  background-color: rgba(251, 191, 36, 0.055);
+  color: var(--text-secondary);
+  font-size: 10.5px;
+  line-height: 1.55;
+}
+
+.lmcc-eval-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.lmcc-eval-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.lmcc-eval-mode select {
+  height: 28px;
+  padding: 0 5px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background-color: var(--bg-input);
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+  font-size: 10.5px;
+  cursor: pointer;
+}
+
+.lmcc-eval-mode select:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.lmcc-eval-run,
+.lmcc-eval-stop,
+.lmcc-eval-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 7px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 550;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease, opacity 0.15s ease;
+}
+
+.lmcc-eval-run {
+  border: 1px solid rgba(124, 107, 255, 0.5);
+  background-color: rgba(124, 107, 255, 0.14);
+  color: var(--accent-bright);
+}
+
+.lmcc-eval-run:hover:not(:disabled) {
+  border-color: rgba(167, 139, 250, 0.7);
+  background-color: rgba(124, 107, 255, 0.24);
+  color: var(--text);
+}
+
+.lmcc-eval-stop {
+  border: 1px solid rgba(251, 113, 133, 0.35);
+  background-color: rgba(251, 113, 133, 0.08);
+  color: var(--danger);
+}
+
+.lmcc-eval-stop:hover:not(:disabled) {
+  background-color: rgba(251, 113, 133, 0.15);
+}
+
+.lmcc-eval-clear {
+  border: 1px solid var(--border);
+  background-color: var(--bg-elevated);
+  color: var(--text-muted);
+}
+
+.lmcc-eval-clear:hover:not(:disabled) {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.lmcc-eval-run:disabled,
+.lmcc-eval-stop:disabled,
+.lmcc-eval-clear:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.lmcc-eval-terminal {
+  min-height: 190px;
+  max-height: 320px;
+  margin: 10px 0 0;
+  padding: 10px 11px;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: #080a10;
+  color: #cbd5e1;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  line-height: 1.6;
+  tab-size: 2;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  scrollbar-width: thin;
+}
+
+.lmcc-eval-terminal:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.lmcc-eval-chunk {
+  white-space: pre-wrap;
+}
+
+.lmcc-eval-chunk.is-stderr {
+  color: #fda4af;
+}
+
+.lmcc-eval-chunk.is-system {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.lmcc-eval-chunk.is-error {
+  color: var(--danger);
+  font-style: normal;
+}
+
+.lmcc-eval-chunk.is-warning {
+  color: var(--warning);
+  font-style: normal;
+}
+
+.lmcc-eval-chunk.is-ok {
+  color: var(--success);
+  font-style: normal;
+}
+
+.lmcc-eval-placeholder {
+  color: #5d657c;
+  font-style: italic;
+}
+
+.lmcc-eval-cursor {
+  display: inline-block;
+  margin-left: 1px;
+  color: var(--accent-bright);
+  animation: lmcc-eval-blink 1.05s steps(1, end) infinite;
+}
+
+@keyframes lmcc-eval-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.lmcc-eval-note {
+  margin: 8px 0 0;
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.lmcc-eval-note.is-error {
+  color: var(--danger);
+}
+
+.lmcc-eval-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+  color: var(--text-muted);
+  font-size: 9.5px;
+}
+
+.lmcc-eval-foot code {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .lmcc-eval-terminal {
+    max-height: 260px;
+  }
+}

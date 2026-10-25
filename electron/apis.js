@@ -1,6 +1,7 @@
 const { ipcMain } = require("electron");
 const fs = require("fs");
 const { readDirectory } = require("./scriptApi/readDirStructure.cjs");
+const { getWorkspaceRoot } = require("./papers.js");
 const apis = {
   init: () => {
     ipcMain.handle("fs:writeFile", async (e, ...args) =>
@@ -15,7 +16,9 @@ const apis = {
 
  
 
-    ipcMain.handle("GetprojectPath", () => __dirname);
+    // The explorer opens the active paper folder from ~/.lmcc-studio, not the
+    // application directory.
+    ipcMain.handle("GetprojectPath", () => getWorkspaceRoot());
     
   },
 };
