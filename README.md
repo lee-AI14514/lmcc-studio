@@ -5,19 +5,10 @@
 <p align="center">
 基于 Electron + Monaco 的现代脚本工作区，采用深靛蓝色主题，内置 Inter / JetBrains Mono 字体，并重新设计了资源管理器、标签栏和对话框。
 <br />
-查看文档 »
-<br />
-<a href="https://github.com/jihwankim97/electron-monacoEditor/issues">报告问题</a>
-·
-<a href="https://github.com/jihwankim97/electron-monacoEditor/issues">提出功能建议</a>
-</p>
-<div align="center">
-  <img src="/public/EditorScreenshot.png" alt="LMCC Studio 现代深色界面">
-</div>
 
 ## 项目介绍
 
-electron-monaco-editor 是一款基于 Electron 的应用，使用 Monaco Editor 提供代码编辑功能，并结合 React 构建用户界面、使用 @emotion/react 编写组件样式等现代 Web 技术进行开发。
+lmcc-studio 是一款基于 Electron 的应用，使用 Monaco Editor 提供代码编辑功能，并结合 React 构建用户界面、使用 @emotion/react 编写组件样式等现代 Web 技术进行开发。
 
 ## 技术栈
 
@@ -36,7 +27,7 @@ electron-monaco-editor 是一款基于 Electron 的应用，使用 Monaco Editor
 
 克隆仓库：
 ```bash
-git clone https://github.com/jihwankim97/electron-monacoEditor.git
+git clone https://github.com/lee-AI14514/lmcc-studio.git
 ```
 
 使用 npm 安装依赖：
