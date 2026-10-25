@@ -126,7 +126,7 @@ LMCC Studio 可以打开 `.lmcc` 题目文件，并在专用阅读器中展示�
 
 ## 联系方式
 
-项目链接：https://github.com/jihwankim97/electron-monacoEditor
+项目链接：https://github.com/lee-AI14514/lmcc-studio
 
 <!-- Markdown 链接与图片 -->
 
@@ -146,4 +146,4 @@ LMCC Studio 可以打开 `.lmcc` 题目文件，并在专用阅读器中展示�
 
 本项目采用 MIT 许可证分发。详见 LICENSE 文件。
 
-项目链接：https://github.com/jihwankim97/electron-monacoEditor
+项目链接：https://github.com/lee-AI14514/lmcc-studio
